@@ -1,0 +1,26 @@
+NewtoonPhysics/
+│
+├── include/                   # Headers públicos da API
+│   ├── NewtoonMath.h          # Vec2, Vec3, Quat
+│   ├── NewtoonTypes.h         # Enums, Colliders, Materials, RaycastHit
+│   ├── ECS/
+│   │   ├── Components3D.h     # Transform, Rigidbody, Colliders 3D, Joints
+│   │   ├── Components2D.h     # Transform2D, Rigidbody2D, Colliders 2D (NOVO)
+│   ├── Systems/
+│   │   ├── PhysicsWorld.h     # O Mundo 3D e Loop de Simulação
+│   │   ├── PhysicsWorld2D.h   # O Mundo 2D otimizado (NOVO)
+│   │   ├── BVH.h              # Árvore Espacial (Broad-Phase)
+│   │   ├── JobSystem.h        # Gerenciador de Multi-threading (NOVO)
+│   ├── Modules/
+│   │   ├── Ragdoll.h
+│   │   ├── Vehicles.h
+│   │   ├── VerletBones.h
+│   ├── DebugVisualNewtoon.h   # Gizmos e Debug visual
+│
+├── src/                       # Implementação (C++)
+│   ├── PhysicsWorld.cpp
+│   ├── PhysicsWorld2D.cpp
+│   ├── JobSystem.cpp
+│
+└── docs/
+    └── README.md              # Documentação de Integração (C++ e JS)
