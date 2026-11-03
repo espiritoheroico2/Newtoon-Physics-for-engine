@@ -1,26 +1,26 @@
 NewtoonPhysics/
 │
-├── include/                   # Headers públicos da API
-│   ├── NewtoonMath.h          # Vec2, Vec3, Quat
-│   ├── NewtoonTypes.h         # Enums, Colliders, Materials, RaycastHit
+├── include/                       # Toda a biblioteca e header-only (cabecalhos .h)
+│   ├── Newtoon.h                  # Cabecalho unico (inclui tudo)
+│   ├── NewtoonMath.h              # Vec2, Vec3, Quat, Mat3
+│   ├── NewtoonTypes.h             # Enums, materiais, eventos, RaycastHit, Transform, Rigidbody, Collider, AABB, Joint, WheelCollider
 │   ├── ECS/
-│   │   ├── Components3D.h     # Transform, Rigidbody, Colliders 3D, Joints
-│   │   ├── Components2D.h     # Transform2D, Rigidbody2D, Colliders 2D (NOVO)
+│   │   ├── Components3D.h         # Inclui NewtoonTypes.h (componentes 3D)
+│   │   ├── Components2D.h         # Transform2D, Rigidbody2D, Collider2D
 │   ├── Systems/
-│   │   ├── PhysicsWorld.h     # O Mundo 3D e Loop de Simulação
-│   │   ├── PhysicsWorld2D.h   # O Mundo 2D otimizado (NOVO)
-│   │   ├── BVH.h              # Árvore Espacial (Broad-Phase)
-│   │   ├── JobSystem.h        # Gerenciador de Multi-threading (NOVO)
+│   │   ├── PhysicsWorld.h         # Mundo 3D: passo fixo, colisao, solver, sono, CCD, gatilhos, eventos, raycast
+│   │   ├── PhysicsWorld2D.h       # Mundo 2D (oficial)
+│   │   ├── BVH.h                  # Arvore espacial (broad-phase e raycast)
+│   │   ├── JobPool.h              # Pool de threads persistente (usado pelo PhysicsWorld)
+│   │   ├── JobSystem.h            # JobSystem oficial (std::async) (usado pelo PhysicsWorld2D)
 │   ├── Modules/
-│   │   ├── Ragdoll.h
-│   │   ├── Vehicles.h
-│   │   ├── VerletBones.h
-│   ├── DebugVisualNewtoon.h   # Gizmos e Debug visual
+│   │   ├── VerletBones.h          # Verlet: ossos e tecidos
+│   │   ├── Vehicles.h             # Suspensao de veiculo por raycast
+│   │   ├── Ragdoll.h              # Controle de ragdoll
+│   ├── DebugVisualNewtoon.h       # Gizmos e debug visual (oficial)
 │
-├── src/                       # Implementação (C++) OPICIONAL
-│   ├── PhysicsWorld.cpp OPICIONAL
-│   ├── PhysicsWorld2D.cpp OPICIONAL
-│   ├── JobSystem.cpp OPICIONAL
+├── tests/
+│   ├── smoke_newtoon.cpp          # Teste de fumaca (g++ puro)
 │
 └── docs/
-    └── README.md              # Documentação de Integração (C++ e JS)
+    └── README.md                  # Documentacao de integracao (C++ e JS)

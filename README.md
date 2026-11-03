@@ -5,7 +5,7 @@ Newtoon Physics é uma biblioteca de física 2D e 3D focada em alta performance,
 ## Características
 * **Memória Contígua:** Sem ponteiros soltos, virtualização ou `std::shared_ptr` no loop de simulação.
 * **Dual API (2D e 3D):** Subsistemas separados. O 2D usa matrizes matemáticas puramente bidimensionais para máxima performance.
-* **Multi-Threaded (Job System):** Integração paralela de velocidades e Broad-Phase dividida por núcleos da CPU.
+* **Multi-Threaded:** `PhysicsWorld` usa um pool de threads persistente (`JobPool`); o mundo 2D usa o `JobSystem` oficial (`std::async`).
 * **Pronto para Renderização:** Expõe a `BVH` internamente para que a sua engine gráfica possa usar os mesmos dados espaciais para Raytracing e Culling de Luzes, poupando memória da GPU.
 * **Módulos Avançados:** Suporte a Ragdoll, Veículos (Raycast Suspension), CCD (Continuous Collision Detection) e Verlet Integration (Ossos/Tecidos dinâmicos).
 
@@ -18,28 +18,33 @@ Newtoon Physics é uma biblioteca de física 2D e 3D focada em alta performance,
 A sua Engine deve ser a "dona" dos arrays de componentes. A Newtoon apenas processa os dados.
 
 ```cpp
-#include "Newtoon/PhysicsWorld.h"
-#include "Newtoon/DebugVisualNewtoon.h"
+#include "Newtoon.h"
 
-Newtoon::PhysicsWorld physics3D;
-Newtoon::PhysicsWorld2D physics2D;
+Newtoon::PhysicsWorld physics3D;          // 3D: colisao SAT (caixa/esfera), solver com atrito, sono, CCD, gatilhos
+Newtoon::PhysicsWorld2D physics2D;        // 2D: integracao simples
 
 void EngineUpdate(float dt) {
-    // 1. Processa a física 3D
-    physics3D.Simulate(myECS.transforms, myECS.rigidbodies, dt);
-    
-    // 2. Lê os eventos de colisão para tocar sons ou dar dano
-    for(auto& event : physics3D.GetCollisionEvents()) {
-        if(event.type == Newtoon::CollisionType::Enter) {
-            AudioEngine::Play("hit.wav");
-        }
+    // 1. A engine e dona dos arrays; a Newtoon so processa (passo fixo; o dt variavel e acumulado)
+    physics3D.Simulate(myECS.transforms, myECS.rigidbodies, myECS.colliders, dt);
+
+    // 2. Eventos de colisao (Enter / Stay / Exit) para sons e dano
+    for (auto& event : physics3D.GetCollisionEvents()) {
+        if (event.type == Newtoon::CollisionType::Enter) AudioEngine::Play("hit.wav");
     }
-    
-    // 3. Limpa os eventos para o próximo frame
     physics3D.ClearEvents();
-    
-    // 4. Renderiza Gizmos (opcional para Editor mode)
-    physics3D.RenderGizmos();
-    MyRenderer::DrawLines(Newtoon::DebugVisualNewtoon::Get().GetLinesToRender());
+
+    // 3. Gizmos de depuracao (opcional)
+    for (auto& l : Newtoon::DebugVisualNewtoon::Get().GetLinesToRender()) MyRenderer::DrawLine(l.start, l.end, l.color);
     Newtoon::DebugVisualNewtoon::Get().Clear();
 }
+```
+
+---
+
+## Testes
+
+Teste de fumaca sem framework (so `g++`):
+
+```
+g++ -std=c++20 -O1 -pthread -Iinclude tests/smoke_newtoon.cpp -o smoke && ./smoke
+```

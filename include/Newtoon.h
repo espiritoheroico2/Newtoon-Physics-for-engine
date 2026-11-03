@@ -1,0 +1,15 @@
+// Newtoon Physics - cabecalho unico (3D, 2D, BVH, modulos, debug).
+#pragma once
+#include "NewtoonMath.h"
+#include "NewtoonTypes.h"
+#include "ECS/Components3D.h"
+#include "ECS/Components2D.h"
+#include "Systems/BVH.h"
+#include "Systems/JobPool.h"
+#include "Systems/JobSystem.h"
+#include "Systems/PhysicsWorld.h"
+#include "Systems/PhysicsWorld2D.h"
+#include "Modules/VerletBones.h"
+#include "Modules/Vehicles.h"
+#include "Modules/Ragdoll.h"
+#include "DebugVisualNewtoon.h"
