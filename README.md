@@ -41,9 +41,21 @@ void EngineUpdate(float dt) {
 
 ---
 
+## Documentação Completa
+
+Consulte o **[Guia Completo de Implementação e Uso (`Newtoon::Core`)](docs/GUIA_NEWTOON_CORE.md)** para regras de integração, exemplos 3D/2D/XPBD, interpolação, configuração para escala massiva e telemetria.
+
 ## Testes
 
-Teste de fumaca sem framework (so `g++`):
+### Via CMake + CTest (Recomendado)
+
+```powershell
+cmake -S . -B build
+cmake --build build --config Release
+ctest --test-dir build -C Release --output-on-failure
+```
+
+Teste de fumaça legado sem framework (so `g++`):
 
 ```
 g++ -std=c++20 -O1 -pthread -Iinclude tests/smoke_newtoon.cpp -o smoke && ./smoke

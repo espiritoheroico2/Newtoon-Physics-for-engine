@@ -1,0 +1,35 @@
+cmake_minimum_required(VERSION 3.16)
+project(NewtoonPhysics LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+add_library(newtoon_core INTERFACE)
+target_include_directories(newtoon_core INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/include")
+if(MSVC)
+  target_compile_options(newtoon_core INTERFACE /W4 /EHsc)
+else()
+  find_package(Threads REQUIRED)
+  target_link_libraries(newtoon_core INTERFACE Threads::Threads)
+  target_compile_options(newtoon_core INTERFACE -Wall -Wextra -Wpedantic)
+endif()
+
+include(CTest)
+if(BUILD_TESTING)
+  add_executable(newtoon_module_smoke tests/newtoon_module_smoke.cpp)
+  target_link_libraries(newtoon_module_smoke PRIVATE newtoon_core)
+  add_test(NAME newtoon_module_smoke COMMAND newtoon_module_smoke)
+
+  add_executable(newtoon_advanced_test tests/newtoon_advanced_test.cpp)
+  target_link_libraries(newtoon_advanced_test PRIVATE newtoon_core)
+  add_test(NAME newtoon_advanced_test COMMAND newtoon_advanced_test)
+
+  add_executable(newtoon_2d_test tests/newtoon_2d_test.cpp)
+  target_link_libraries(newtoon_2d_test PRIVATE newtoon_core)
+  add_test(NAME newtoon_2d_test COMMAND newtoon_2d_test)
+
+  add_executable(newtoon_scale_test tests/newtoon_scale_test.cpp)
+  target_link_libraries(newtoon_scale_test PRIVATE newtoon_core)
+  add_test(NAME newtoon_scale_test COMMAND newtoon_scale_test)
+endif()
